@@ -4,36 +4,36 @@ jobs: # a basic unit of work in a run
   test: # your job name
     macos:
       xcode: 13.4.1 # indicate your selected version of Xcode
-      resource_class: macos.m1.large.gen1 #Apple Silicon resource
+      resource_class: ''                  #Apple Silicon resource
     steps: # a series of commands to run
-      - checkout  # pull down code from your version control system.
-      - run:
-          name: Run Unit Tests
-          command: xcodebuild test -scheme circleci-demo-macos
+    - checkout    # pull down code from your version control system.
+    - run:
+        name: Run Unit Tests
+        command: xcodebuild test -scheme circleci-demo-macos
 
-  build: 
+  build:
     macos:
       xcode: 13.4.1 # indicate your selected version of Xcode
-      resource_class: macos.m1.large.gen1 #Apple Silicon resource
-    steps: 
-      - checkout
-      - run:
+      resource_class: ''                  #Apple Silicon resource
+    steps:
+    - checkout
+    - run:
           # build our application
-          name: Build Application
-          command: xcodebuild
-      - run:
+        name: Build Application
+        command: xcodebuild
+    - run:
           # compress Xcode's build output so that it can be stored as an artifact
-          name: Compress app for storage
-          command: zip -r app.zip build/Release/circleci-demo-macos.app
-      - store_artifacts: # store this build output. Read more: https://circleci.com/docs/2.0/artifacts/
-          path: app.zip
-          destination: app
-          
+        name: Compress app for storage
+        command: zip -r app.zip build/Release/circleci-demo-macos.app
+    - store_artifacts:   # store this build output. Read more: https://circleci.com/docs/2.0/artifacts/
+        path: app.zip
+        destination: app
+
 workflows:
   version: 2
   test_build:
     jobs:
-      - test
-      - build:
-          requires:
-            - test
+    - test
+    - build:
+        requires:
+        - test
